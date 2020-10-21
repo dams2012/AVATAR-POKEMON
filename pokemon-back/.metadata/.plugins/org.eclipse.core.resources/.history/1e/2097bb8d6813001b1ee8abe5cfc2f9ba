@@ -1,0 +1,11 @@
+package com.avatar.pokemon.service;
+
+import java.util.List;
+
+import com.avatar.pokemon.model.Pokemon;
+
+public interface PokemonService {
+	
+	List<Pokemon> obtenerListaEspecies();
+
+}

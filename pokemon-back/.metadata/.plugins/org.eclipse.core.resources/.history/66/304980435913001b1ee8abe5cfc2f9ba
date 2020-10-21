@@ -1,0 +1,7 @@
+package com.avatar.pokemon.controller;
+
+import org.springframework.web.;
+
+public class PokemonController {
+
+}

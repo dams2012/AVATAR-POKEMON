@@ -1,0 +1,29 @@
+package com.avatar.pokemon.controller;
+
+import java.util.List;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.avatar.pokemon.model.Pokemon;
+import com.avatar.pokemon.service.PokemonService;
+
+@RestController
+@RequestMapping("/especies")
+public class PokemonController {
+	
+	public PokemonService service;
+	
+	public PokemonService getService() {
+		return service;
+	}
+	
+	public void setService(PokemonService service) {
+		this.service = service;
+	}
+
+	public List<Pokemon> obtenerListaEspecies(){
+		return null;
+	}
+
+}

@@ -1,0 +1,5 @@
+package com.avatar.pokemon.controller;
+
+public class PokemonController {
+
+}

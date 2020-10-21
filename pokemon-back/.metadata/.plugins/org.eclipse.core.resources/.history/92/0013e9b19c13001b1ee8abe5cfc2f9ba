@@ -1,0 +1,5 @@
+package com.avatar.pokemon.model;
+
+public class Pokemon {
+
+}

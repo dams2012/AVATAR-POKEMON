@@ -1,0 +1,15 @@
+package com.avatar.pokemon.service;
+
+import java.util.List;
+
+import com.avatar.pokemon.model.Pokemon;
+
+public class PokemonServiceImpl implements PokemonService {
+	
+	@Override
+	public List<Pokemon> obtenerListaEspecies() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

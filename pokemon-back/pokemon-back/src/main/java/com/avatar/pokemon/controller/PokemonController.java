@@ -1,0 +1,43 @@
+package com.avatar.pokemon.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.avatar.pokemon.model.Pokemon;
+import com.avatar.pokemon.service.PokemonService;
+import com.avatar.pokemon.service.PokemonServiceImpl;
+
+import me.sargunvohra.lib.pokekotlin.client.PokeApi;
+import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
+
+@RestController
+@RequestMapping("/especies")
+public class PokemonController {
+	
+	public PokemonServiceImpl service = new PokemonServiceImpl();
+	
+	public PokemonServiceImpl getService() {
+		return service;
+	}
+
+	@GetMapping
+	/*public List<Pokemon> obtenerListaEspecies(){
+		PokeApi pa = new PokeApiClient();
+		
+		System.out.println(pa.getPokemonSpeciesList(0, 20));
+		
+		return null;
+	}*/
+	public ResponseEntity<List<Pokemon>> obtenerListaEspecies(
+			@RequestParam(value="limit", required=true) int limit){
+		PokeApi p = new PokeApiClient();
+		return ResponseEntity.ok(getService().obtenerListaEspecies(p, limit));
+	}
+
+}

@@ -1,0 +1,25 @@
+package com.avatar.pokemon.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.avatar.pokemon.model.Pokemon;
+
+import me.sargunvohra.lib.pokekotlin.client.PokeApi;
+
+public class PokemonServiceImpl implements PokemonService {
+	
+	@Override
+	public List<Pokemon> obtenerListaEspecies(PokeApi p, int limit) {
+		List<Pokemon> listaEspecies = new ArrayList<Pokemon>();
+		Pokemon pk = new Pokemon();
+		
+		for(int i=1; i<limit; i++) {
+			me.sargunvohra.lib.pokekotlin.model.Pokemon pokeSpecies = p.getPokemon(i);
+			
+		}
+		
+		return listaEspecies;
+	}
+
+}

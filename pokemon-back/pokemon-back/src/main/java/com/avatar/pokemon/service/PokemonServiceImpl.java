@@ -1,0 +1,82 @@
+package com.avatar.pokemon.service;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.avatar.pokemon.model.Pokemon;
+
+import me.sargunvohra.lib.pokekotlin.client.PokeApi;
+import me.sargunvohra.lib.pokekotlin.model.ChainLink;
+import me.sargunvohra.lib.pokekotlin.model.EvolutionChain;
+import me.sargunvohra.lib.pokekotlin.model.PokemonAbility;
+import me.sargunvohra.lib.pokekotlin.model.PokemonMove;
+import me.sargunvohra.lib.pokekotlin.model.PokemonSpecies;
+import me.sargunvohra.lib.pokekotlin.model.PokemonType;
+
+public class PokemonServiceImpl implements PokemonService {
+	
+	@Override
+	public List<Pokemon> obtenerListaEspecies(PokeApi p, int limit) {
+		List<Pokemon> listaEspecies = new ArrayList<Pokemon>();
+		
+		
+		for(int i=1; i<limit; i++) {
+			Pokemon pk = new Pokemon();
+			
+			me.sargunvohra.lib.pokekotlin.model.Pokemon poke = p.getPokemon(i);
+			pk.setId(poke.getId());
+			pk.setNombre(poke.getName());
+			pk.setAltura(poke.getHeight()/10.0);
+			pk.setPeso(poke.getWeight()/10.0);
+			
+			//Obtener tipos de pokemon
+			List<PokemonType> typeList = poke.getTypes();
+			
+			if(typeList.size() == 1) {
+				pk.setTipoPrincipal(typeList.get(0).getType().getName());
+			} else {
+				pk.setTipoPrincipal(typeList.get(0).getType().getName());
+				pk.setTipoSecundario(typeList.get(1).getType().getName());
+			}
+			
+			//Obtener lista de ataques
+			List<String> ataques = new ArrayList<>();
+			for (PokemonMove move : poke.getMoves()) {
+				ataques.add(move.getMove().getName());
+			}
+			
+			pk.setListaAtaques(ataques);
+			
+			//Obtener cadena evolutiva
+			List<String> cadenaEvolutiva = new ArrayList<>();
+			
+			PokemonSpecies species = p.getPokemonSpecies(poke.getId());
+			int evolutionChain = species.getEvolutionChain().getId();			
+			EvolutionChain e = p.getEvolutionChain(evolutionChain);
+			ChainLink cl = e.getChain();
+			
+			cadenaEvolutiva.add(cl.getSpecies().getName());
+			
+			if(cl.getEvolvesTo().size() > 1) {
+				for (ChainLink chain : cl.getEvolvesTo()) {
+					cadenaEvolutiva.add(chain.getSpecies().getName());
+				}
+			} else {			
+				cadenaEvolutiva.add(cl.getEvolvesTo().get(0).getSpecies().getName());
+							
+				if(cl.getEvolvesTo().get(0).getEvolvesTo().size() > 0) {
+					cadenaEvolutiva.add(cl.getEvolvesTo().get(0).getEvolvesTo().get(0).getSpecies().getName());
+				}
+			}
+		
+			listaEspecies.add(pk);
+		}
+		
+		return listaEspecies;
+	}
+
+}

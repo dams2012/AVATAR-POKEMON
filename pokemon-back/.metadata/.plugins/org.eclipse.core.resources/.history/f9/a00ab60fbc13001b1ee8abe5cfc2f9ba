@@ -1,0 +1,62 @@
+package com.avatar.pokemon.service;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.avatar.pokemon.model.Pokemon;
+
+import me.sargunvohra.lib.pokekotlin.client.PokeApi;
+import me.sargunvohra.lib.pokekotlin.model.PokemonType;
+
+public class PokemonServiceImpl implements PokemonService {
+	
+	@Override
+	public List<Pokemon> obtenerListaEspecies(PokeApi p, int limit) {
+		List<Pokemon> listaEspecies = new ArrayList<Pokemon>();
+		
+		
+		for(int i=1; i<limit; i++) {
+			Pokemon pk = new Pokemon();
+			
+			me.sargunvohra.lib.pokekotlin.model.Pokemon poke = p.getPokemon(i);
+			pk.setId(poke.getId());
+			pk.setNombre(poke.getName());
+			pk.setAltura(poke.getHeight()/10.0);
+			pk.setPeso(poke.getWeight()/10.0);
+			
+			//Obtener tipos de pokemon
+			try {
+				List<PokemonType> typeList = poke.getTypes();
+				for (PokemonType type : typeList) {
+					URL u = new URL(type.getType().toString());
+					HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+					conn.setRequestMethod("GET");
+					
+					BufferedReader in = new BufferedReader(
+					  new InputStreamReader(conn.getInputStream()));
+					String inputLine;
+					StringBuffer content = new StringBuffer();
+					while ((inputLine = in.readLine()) != null) {
+					    content.append(inputLine);
+					}
+					in.close();
+					conn.disconnect();
+					System.out.println(content.toString());
+					
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			listaEspecies.add(pk);
+		}
+		
+		return listaEspecies;
+	}
+
+}
